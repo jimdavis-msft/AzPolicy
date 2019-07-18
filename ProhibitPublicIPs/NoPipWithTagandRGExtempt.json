@@ -1,0 +1,33 @@
+{
+    "mode": "All",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "Microsoft.Network/networkInterfaces/ipconfigurations[*].publicIpAddress.id",
+            "contains": "publicIpAddresses"
+          },
+          {
+            "allOf": [
+              {
+                "field": "tags",
+                "notContainsKey": "pipexempt"
+              },
+              {
+                "field": "Microsoft.Network/networkInterfaces/ipconfigurations[*].subnet.id",
+                "notContains": "gatewaysubnet"
+              },
+              {
+                "value": "[resourceGroup().name]",
+                "notContains": "RESOURCE-GROUP-NAME"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    },
+    "parameters": {}
+  }
